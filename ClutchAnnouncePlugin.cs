@@ -49,7 +49,7 @@ public class ClutchAnnouncePlugin : BasePlugin
     {
         Console.WriteLine($"{LogPrefix}OnRoundEnd event fired!");
 
-        if (_clutchPlayer != null && (CsTeam)@event.Winner == _clutchTeam)
+        if (_clutchPlayer != null && IsValidPlayer(_clutchPlayer) && (CsTeam)@event.Winner == _clutchTeam)
         {
             Server.PrintToChatAll(
                 $"{MessagePrefix}Player {ChatColors.Green}{_clutchPlayer.PlayerName}{ChatColors.White} has clutched a 1v{_opponents}!");
