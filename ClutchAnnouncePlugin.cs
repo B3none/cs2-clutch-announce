@@ -9,7 +9,7 @@ namespace ClutchAnnouncePlugin;
 [MinimumApiVersion(129)]
 public class ClutchAnnouncePlugin : BasePlugin
 {
-    private const string Version = "1.0.0";
+    private const string Version = "1.0.1";
     
     public override string ModuleName => "Clutch Announce Plugin";
     public override string ModuleVersion => Version;
