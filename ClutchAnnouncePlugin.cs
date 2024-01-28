@@ -66,7 +66,7 @@ public class ClutchAnnouncePlugin : BasePlugin
 
         if (IsValidPlayer(_clutchPlayer) && (CsTeam)@event.Winner == _clutchTeam)
         {
-            Server.PrintToChatAll(MessagePrefix + _translator["clutch_announce.clutched", _clutchPlayer.PlayerName, _opponents]);
+            Server.PrintToChatAll(MessagePrefix + _translator["clutch_announce.clutched", _clutchPlayer!.PlayerName, _opponents]);
         }
         
         _clutchPlayer = null;
