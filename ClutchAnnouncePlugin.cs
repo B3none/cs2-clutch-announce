@@ -64,7 +64,7 @@ public class ClutchAnnouncePlugin : BasePlugin
     {
         Console.WriteLine($"{LogPrefix}OnRoundEnd event fired!");
 
-        if (_clutchPlayer != null && IsValidPlayer(_clutchPlayer) && (CsTeam)@event.Winner == _clutchTeam)
+        if (IsValidPlayer(_clutchPlayer) && (CsTeam)@event.Winner == _clutchTeam)
         {
             Server.PrintToChatAll(MessagePrefix + _translator["clutch_announce.clutched", _clutchPlayer.PlayerName, _opponents]);
         }
@@ -118,11 +118,12 @@ public class ClutchAnnouncePlugin : BasePlugin
     }
     
     // Helpers
-    private static bool IsValidPlayer(CCSPlayerController player)
+    private static bool IsValidPlayer(CCSPlayerController? player)
     {
-        return player.IsValid 
-           && player.PlayerPawn.IsValid
-           && player.PlayerPawn.Value != null
-           && player.PlayerPawn.Value.IsValid;
+        return player != null
+            && player.IsValid 
+            && player.PlayerPawn.IsValid
+            && player.PlayerPawn.Value != null
+            && player.PlayerPawn.Value.IsValid;
     }
 }
