@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API;
+﻿using ClutchAnnouncePlugin.Modules;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
@@ -6,26 +7,40 @@ using CounterStrikeSharp.API.Modules.Utils;
 
 namespace ClutchAnnouncePlugin;
 
-[MinimumApiVersion(129)]
+[MinimumApiVersion(147)]
 public class ClutchAnnouncePlugin : BasePlugin
 {
-    private const string Version = "1.0.1";
+    private const string Version = "1.1.0";
     
     public override string ModuleName => "Clutch Announce Plugin";
     public override string ModuleVersion => Version;
     public override string ModuleAuthor => "B3none";
     public override string ModuleDescription => "Announce when someone wins a clutch scenario";
 
-    private const string LogPrefix = $"[Clutch Announce {Version}] ";
-    private static readonly string MessagePrefix = $"[{ChatColors.Yellow}Clutch{ChatColors.White}] ";
-    
     // Constants
+    private const string LogPrefix = $"[Clutch Announce {Version}] ";
+    private static string MessagePrefix = $"[{ChatColors.Green}Retakes{ChatColors.White}] ";
+    
+    // Config
     private const int MinPlayers = 3;
+    private Translator _translator;
     
     // State
     private int _opponents;
     private CsTeam? _clutchTeam;
     private CCSPlayerController? _clutchPlayer;
+    
+    public ClutchAnnouncePlugin()
+    {
+        _translator = new Translator(Localizer);
+    }
+
+    public override void Load(bool hotReload)
+    {
+        _translator = new Translator(Localizer);
+
+        MessagePrefix = _translator["clutch_announce.prefix"];
+    }
 
     // Listeners
     [GameEventHandler]
@@ -51,8 +66,7 @@ public class ClutchAnnouncePlugin : BasePlugin
 
         if (_clutchPlayer != null && IsValidPlayer(_clutchPlayer) && (CsTeam)@event.Winner == _clutchTeam)
         {
-            Server.PrintToChatAll(
-                $"{MessagePrefix}Player {ChatColors.Green}{_clutchPlayer.PlayerName}{ChatColors.White} has clutched a 1v{_opponents}!");
+            Server.PrintToChatAll(MessagePrefix + _translator["clutch_announce.clutched", _clutchPlayer.PlayerName, _opponents]);
         }
         
         _clutchPlayer = null;
@@ -77,11 +91,11 @@ public class ClutchAnnouncePlugin : BasePlugin
         
         foreach (var player in players)
         {
-            if ((CsTeam)player.TeamNum == CsTeam.CounterTerrorist && player.PlayerPawn.Value!.Health > 0)
+            if (player.Team == CsTeam.CounterTerrorist && player.PlayerPawn.Value!.Health > 0)
             {
                 aliveCts.Add(player);
             }
-            else if ((CsTeam)player.TeamNum == CsTeam.Terrorist && player.PlayerPawn.Value!.Health > 0)
+            else if (player.Team == CsTeam.Terrorist && player.PlayerPawn.Value!.Health > 0)
             {
                 aliveTs.Add(player);
             }
@@ -107,8 +121,8 @@ public class ClutchAnnouncePlugin : BasePlugin
     private static bool IsValidPlayer(CCSPlayerController player)
     {
         return player.IsValid 
-               && player.PlayerPawn.IsValid
-               && player.PlayerPawn.Value != null
-               && player.PlayerPawn.Value.IsValid;
+           && player.PlayerPawn.IsValid
+           && player.PlayerPawn.Value != null
+           && player.PlayerPawn.Value.IsValid;
     }
 }
