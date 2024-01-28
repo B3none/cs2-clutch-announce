@@ -1,0 +1,4 @@
+{
+  "clutch_announce.prefix": "[[GREEN]Retakes[WHITE]] ",
+  "clutch_announce.clutched": "[GREEN]{0}[WHITE] ganhou o [DARKRED]1v{1}[WHITE]!"
+}
