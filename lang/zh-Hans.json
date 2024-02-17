@@ -1,0 +1,4 @@
+{
+  "clutch_announce.prefix": "[[GREEN]Retakes[WHITE]] ",
+  "clutch_announce.clutched": "玩家 [GREEN]{0}[WHITE] 赢下了 1v{1}残局！"
+}
